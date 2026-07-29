@@ -356,6 +356,11 @@ tr:last-child td {
   background: white;
 }
 
+.recipe-row-unit {
+  color: var(--muted);
+  text-align: center;
+}
+
 .filter-row {
   display: grid;
   grid-template-columns: minmax(180px, 1fr) 220px;

@@ -77,6 +77,18 @@ export type PlanEntry = {
   menu?: Menu
 }
 
+export type DayNutrition = {
+  date: string
+  nutrition: Nutrition
+}
+
+export type NutritionSummaryResponse = {
+  week_start: string
+  week_end: string
+  days: DayNutrition[]
+  week_total: Nutrition
+}
+
 export type ShoppingListRow = {
   food_id: number
   name: string

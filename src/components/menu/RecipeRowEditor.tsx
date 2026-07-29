@@ -3,7 +3,6 @@ import type { Food } from '../../types/models'
 export type RecipeRowValue = {
   food_id: number
   quantity: string
-  unit: string
 }
 
 type Props = {
@@ -22,7 +21,7 @@ export function RecipeRowEditor({ rows, foods, onChange }: Props) {
   }
 
   function addRow() {
-    onChange([...rows, { food_id: foods[0]?.id ?? 0, quantity: '', unit: 'g' }])
+    onChange([...rows, { food_id: foods[0]?.id ?? 0, quantity: '' }])
   }
 
   return (
@@ -47,10 +46,9 @@ export function RecipeRowEditor({ rows, foods, onChange }: Props) {
               value={row.quantity}
               onChange={(e) => updateRow(index, { quantity: e.target.value })}
             />
-            <input
-              value={row.unit}
-              onChange={(e) => updateRow(index, { unit: e.target.value })}
-            />
+            <span className="recipe-row-unit">
+              {foods.find((food) => food.id === row.food_id)?.unit ?? ''}
+            </span>
             <button type="button" className="danger" onClick={() => removeRow(index)}>
               削除
             </button>

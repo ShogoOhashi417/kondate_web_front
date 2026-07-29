@@ -30,7 +30,6 @@ export function MenuEditPage() {
         (menu.recipe_items ?? []).map((item) => ({
           food_id: item.food_id,
           quantity: item.quantity,
-          unit: item.unit,
         })),
       )
     })
@@ -46,12 +45,12 @@ export function MenuEditPage() {
     }
 
     const recipe = recipeRows
-      .filter((row) => row.food_id && row.unit.trim())
-      .map((row) => ({ food_id: row.food_id, quantity: Number(row.quantity), unit: row.unit.trim() }))
+      .filter((row) => row.food_id)
+      .map((row) => ({ food_id: row.food_id, quantity: Number(row.quantity) }))
 
-    const pairs = recipe.map((r) => `${r.food_id}-${r.unit}`)
-    if (new Set(pairs).size !== pairs.length) {
-      setError('同じ食材・同じ単位は重複登録できません。')
+    const foodIds = recipe.map((r) => r.food_id)
+    if (new Set(foodIds).size !== foodIds.length) {
+      setError('同じ食材は重複登録できません。')
       return
     }
 

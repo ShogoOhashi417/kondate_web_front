@@ -2,21 +2,28 @@ import { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { apiFetch } from '../lib/api/client'
 import { useWeek } from '../hooks/useWeek'
-import type { PlanEntry } from '../types/models'
+import { NUTRITION_LABELS } from '../lib/nutritionLabels'
+import type { Nutrition, PlanEntry } from '../types/models'
 import { DayCard } from '../components/weekly/DayCard'
 import { AddMenuModal } from '../components/weekly/AddMenuModal'
+
+const SUMMARY_FIELDS = ['calorie', 'protein', 'fat', 'carbohydrate'] as const
 
 export function WeeklyPlanPage() {
   const { anchorDate, weekStart, weekEnd, days, goPrevWeek, goNextWeek, goThisWeek } = useWeek()
   const [entries, setEntries] = useState<PlanEntry[]>([])
+  const [nutritionTotal, setNutritionTotal] = useState<Nutrition | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [modalDate, setModalDate] = useState<string | null>(null)
   const navigate = useNavigate()
 
   const loadEntries = useCallback(() => {
     setIsLoading(true)
-    apiFetch<{ entries: PlanEntry[] }>('/plans', { params: { date: anchorDate } })
-      .then((res) => setEntries(res.entries))
+    apiFetch<{ entries: PlanEntry[]; nutrition_total: Nutrition }>('/plans', { params: { date: anchorDate } })
+      .then((res) => {
+        setEntries(res.entries)
+        setNutritionTotal(res.nutrition_total)
+      })
       .finally(() => setIsLoading(false))
   }, [anchorDate])
 
@@ -47,6 +54,18 @@ export function WeeklyPlanPage() {
           </button>
         </div>
       </div>
+
+      {nutritionTotal && (
+        <div className="notice" style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
+          <strong>週合計</strong>
+          {SUMMARY_FIELDS.map((field) => (
+            <span key={field}>
+              {NUTRITION_LABELS[field].label}: {nutritionTotal[field]}
+              {NUTRITION_LABELS[field].suffix}
+            </span>
+          ))}
+        </div>
+      )}
 
       {isLoading ? (
         <div className="empty">読み込み中…</div>

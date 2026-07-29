@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 const NAV_ITEMS = [
   { to: '/weekly', label: '週間献立' },
   { to: '/shopping-list', label: '買い物リスト' },
+  { to: '/nutrition', label: '栄養バランス' },
   { to: '/menus', label: 'メニュー一覧' },
   { to: '/foods', label: '食材一覧' },
 ]
