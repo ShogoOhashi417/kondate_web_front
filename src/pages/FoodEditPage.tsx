@@ -1,7 +1,40 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { apiFetch, ApiError } from '../lib/api/client'
-import { FOOD_CATEGORIES, type Food, type FoodCategory } from '../types/models'
+import {
+  FOOD_CATEGORIES,
+  NUTRITION_FIELDS,
+  type Food,
+  type FoodCategory,
+  type Nutrition,
+  type NutritionField,
+} from '../types/models'
+
+const NUTRITION_LABELS: Record<NutritionField, { label: string; suffix: string }> = {
+  calorie: { label: 'カロリー', suffix: 'kcal' },
+  protein: { label: 'タンパク質', suffix: 'g' },
+  fat: { label: '脂質', suffix: 'g' },
+  carbohydrate: { label: '炭水化物', suffix: 'g' },
+  vitamin_a: { label: 'ビタミンA', suffix: 'μg' },
+  vitamin_b1: { label: 'ビタミンB1', suffix: 'mg' },
+  vitamin_b2: { label: 'ビタミンB2', suffix: 'mg' },
+  vitamin_b6: { label: 'ビタミンB6', suffix: 'mg' },
+  vitamin_b12: { label: 'ビタミンB12', suffix: 'μg' },
+  vitamin_c: { label: 'ビタミンC', suffix: 'mg' },
+  vitamin_d: { label: 'ビタミンD', suffix: 'μg' },
+  vitamin_e: { label: 'ビタミンE', suffix: 'mg' },
+  vitamin_k: { label: 'ビタミンK', suffix: 'μg' },
+  folic_acid: { label: '葉酸', suffix: 'μg' },
+  calcium: { label: 'カルシウム', suffix: 'mg' },
+  iron: { label: '鉄', suffix: 'mg' },
+  zinc: { label: '亜鉛', suffix: 'mg' },
+  magnesium: { label: 'マグネシウム', suffix: 'mg' },
+  potassium: { label: 'カリウム', suffix: 'mg' },
+}
+
+function emptyNutrition(): Nutrition {
+  return Object.fromEntries(NUTRITION_FIELDS.map((field) => [field, ''])) as Nutrition
+}
 
 export function FoodEditPage() {
   const { id } = useParams()
@@ -10,6 +43,8 @@ export function FoodEditPage() {
 
   const [name, setName] = useState('')
   const [category, setCategory] = useState<FoodCategory>(FOOD_CATEGORIES[0])
+  const [unit, setUnit] = useState('')
+  const [nutrition, setNutrition] = useState<Nutrition>(emptyNutrition)
   const [inUse, setInUse] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -20,9 +55,15 @@ export function FoodEditPage() {
     apiFetch<Food>(`/foods/${id}`).then((food) => {
       setName(food.name)
       setCategory(food.category)
+      setUnit(food.unit)
+      setNutrition(Object.fromEntries(NUTRITION_FIELDS.map((field) => [field, food[field]])) as Nutrition)
       setInUse(Boolean(food.in_use))
     })
   }, [id])
+
+  function updateNutrition(field: NutritionField, value: string) {
+    setNutrition((prev) => ({ ...prev, [field]: value }))
+  }
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
@@ -33,13 +74,20 @@ export function FoodEditPage() {
       return
     }
 
+    if (!unit.trim()) {
+      setError('単位を入力してください。')
+      return
+    }
+
     setIsSubmitting(true)
+
+    const body = { name, category, unit, ...nutrition }
 
     try {
       if (isEditing) {
-        await apiFetch(`/foods/${id}`, { method: 'PUT', body: { name, category } })
+        await apiFetch(`/foods/${id}`, { method: 'PUT', body })
       } else {
-        await apiFetch('/foods', { method: 'POST', body: { name, category } })
+        await apiFetch('/foods', { method: 'POST', body })
       }
       navigate('/foods')
     } catch (err) {
@@ -54,7 +102,7 @@ export function FoodEditPage() {
       <div className="page-header">
         <h1>{isEditing ? '食材編集' : '食材新規登録'}</h1>
       </div>
-      <form className="form-card" style={{ maxWidth: 620 }} onSubmit={handleSubmit}>
+      <form className="form-card" style={{ maxWidth: 780 }} onSubmit={handleSubmit}>
         <div className="field">
           <label htmlFor="foodName">食材名</label>
           <input id="foodName" value={name} onChange={(e) => setName(e.target.value)} placeholder="例：玉ねぎ" />
@@ -69,6 +117,35 @@ export function FoodEditPage() {
             ))}
           </select>
         </div>
+        <div className="field">
+          <label htmlFor="foodUnit">単位</label>
+          <input
+            id="foodUnit"
+            value={unit}
+            onChange={(e) => setUnit(e.target.value)}
+            placeholder="例：100g、1個"
+          />
+        </div>
+
+        <h2 className="section-title">栄養成分（単位あたり）</h2>
+        <div className="field-grid">
+          {NUTRITION_FIELDS.map((field) => (
+            <div className="field" key={field}>
+              <label htmlFor={`nutrition-${field}`}>
+                {NUTRITION_LABELS[field].label}（{NUTRITION_LABELS[field].suffix}）
+              </label>
+              <input
+                id={`nutrition-${field}`}
+                type="number"
+                step="0.01"
+                min="0"
+                value={nutrition[field]}
+                onChange={(e) => updateNutrition(field, e.target.value)}
+              />
+            </div>
+          ))}
+        </div>
+
         {inUse && (
           <div className="notice">
             この食材はレシピで使用されています。削除するには、先にレシピから削除してください。

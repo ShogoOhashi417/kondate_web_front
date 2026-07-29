@@ -15,14 +15,41 @@ export const MENU_STATUSES = ['active', 'inactive'] as const
 
 export type MenuStatus = (typeof MENU_STATUSES)[number]
 
+export const NUTRITION_FIELDS = [
+  'calorie',
+  'protein',
+  'fat',
+  'carbohydrate',
+  'vitamin_a',
+  'vitamin_b1',
+  'vitamin_b2',
+  'vitamin_b6',
+  'vitamin_b12',
+  'vitamin_c',
+  'vitamin_d',
+  'vitamin_e',
+  'vitamin_k',
+  'folic_acid',
+  'calcium',
+  'iron',
+  'zinc',
+  'magnesium',
+  'potassium',
+] as const
+
+export type NutritionField = (typeof NUTRITION_FIELDS)[number]
+
+export type Nutrition = Record<NutritionField, string>
+
 export type Food = {
   id: number
   name: string
   category: FoodCategory
+  unit: string
   created_at: string
   updated_at: string
   in_use?: boolean
-}
+} & Nutrition
 
 export type RecipeItem = {
   id: number

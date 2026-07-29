@@ -326,6 +326,19 @@ tr:last-child td {
   max-width: 920px;
 }
 
+.section-title {
+  font-size: 15px;
+  margin: 26px 0 14px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0 16px;
+}
+
 .recipe-row {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr auto;
@@ -448,6 +461,10 @@ tr:last-child td {
   .filter-row {
     grid-template-columns: 1fr;
   }
+
+  .field-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 640px) {
@@ -471,5 +488,9 @@ tr:last-child td {
 
   .nav {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .field-grid {
+    grid-template-columns: 1fr;
   }
 }
