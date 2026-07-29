@@ -1,33 +1,39 @@
 import { useState, type FormEvent } from 'react'
-import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/auth/AuthContext'
 import { ApiError } from '../lib/api/client'
 
-export function LoginPage() {
-  const { user, login } = useAuth()
+export function RegisterPage() {
+  const { user, register } = useAuth()
   const navigate = useNavigate()
-  const location = useLocation()
 
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [passwordConfirmation, setPasswordConfirmation] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   if (user) {
-    const redirectTo = (location.state as { from?: string } | null)?.from ?? '/weekly'
-    return <Navigate to={redirectTo} replace />
+    return <Navigate to="/weekly" replace />
   }
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
     setError(null)
+
+    if (password !== passwordConfirmation) {
+      setError('パスワードが一致しません。')
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
-      await login(email, password)
+      await register(name, email, password, passwordConfirmation)
       navigate('/weekly', { replace: true })
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'ログインに失敗しました。')
+      setError(err instanceof ApiError ? err.message : '登録に失敗しました。')
     } finally {
       setIsSubmitting(false)
     }
@@ -39,9 +45,13 @@ export function LoginPage() {
         <div className="brand">
           <div className="brand-icon">🍲</div>
           <h1>楽・こんだて</h1>
-          <p>メールアドレスとパスワードでログイン</p>
+          <p>新規アカウントを作成</p>
         </div>
         <form onSubmit={handleSubmit}>
+          <div className="field">
+            <label htmlFor="name">名前</label>
+            <input id="name" value={name} onChange={(e) => setName(e.target.value)} required />
+          </div>
           <div className="field">
             <label htmlFor="email">メールアドレス</label>
             <input
@@ -59,16 +69,28 @@ export function LoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              minLength={8}
+              required
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="passwordConfirmation">パスワード（確認）</label>
+            <input
+              id="passwordConfirmation"
+              type="password"
+              value={passwordConfirmation}
+              onChange={(e) => setPasswordConfirmation(e.target.value)}
+              minLength={8}
               required
             />
           </div>
           {error && <div className="notice error">{error}</div>}
           <button type="submit" className="primary" style={{ width: '100%' }} disabled={isSubmitting}>
-            {isSubmitting ? 'ログイン中…' : 'ログイン'}
+            {isSubmitting ? '登録中…' : '登録する'}
           </button>
         </form>
         <p className="auth-switch">
-          アカウントをお持ちでないですか？ <Link to="/register">新規登録</Link>
+          すでにアカウントをお持ちですか？ <Link to="/login">ログイン</Link>
         </p>
       </div>
     </section>

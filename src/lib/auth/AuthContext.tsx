@@ -6,6 +6,7 @@ type AuthContextValue = {
   user: User | null
   isLoading: boolean
   login: (email: string, password: string) => Promise<void>
+  register: (name: string, email: string, password: string, passwordConfirmation: string) => Promise<void>
   logout: () => Promise<void>
 }
 
@@ -43,6 +44,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(response.user)
   }, [])
 
+  const register = useCallback(
+    async (name: string, email: string, password: string, passwordConfirmation: string) => {
+      const response = await apiFetch<{ token: string; user: User }>('/register', {
+        method: 'POST',
+        body: { name, email, password, password_confirmation: passwordConfirmation },
+      })
+      setToken(response.token)
+      setUser(response.user)
+    },
+    [],
+  )
+
   const logout = useCallback(async () => {
     try {
       await apiFetch('/logout', { method: 'POST' })
@@ -52,7 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [clearSession])
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   )

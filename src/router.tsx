@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import { ProtectedRoute } from './routes/ProtectedRoute'
 import { AppShell } from './components/layout/AppShell'
 import { LoginPage } from './pages/LoginPage'
+import { RegisterPage } from './pages/RegisterPage'
 import { WeeklyPlanPage } from './pages/WeeklyPlanPage'
 import { ShoppingListPage } from './pages/ShoppingListPage'
 import { MenuListPage } from './pages/MenuListPage'
@@ -11,6 +12,7 @@ import { FoodEditPage } from './pages/FoodEditPage'
 
 export const router = createBrowserRouter([
   { path: '/login', element: <LoginPage /> },
+  { path: '/register', element: <RegisterPage /> },
   {
     element: <ProtectedRoute />,
     children: [
