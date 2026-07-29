@@ -38,7 +38,7 @@ export function LoginPage() {
       <div className="login-card">
         <div className="brand">
           <div className="brand-icon">🍲</div>
-          <h1>献立・買い物リスト</h1>
+          <h1>こんだて</h1>
           <p>メールアドレスとパスワードでログイン</p>
         </div>
         <form onSubmit={handleSubmit}>
