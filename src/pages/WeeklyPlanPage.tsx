@@ -56,18 +56,6 @@ export function WeeklyPlanPage() {
         </div>
       </div>
 
-      {nutritionTotal && (
-        <div className="notice" style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
-          <strong>週合計</strong>
-          {SUMMARY_FIELDS.map((field) => (
-            <span key={field}>
-              {NUTRITION_LABELS[field].label}: {nutritionTotal[field]}
-              {NUTRITION_LABELS[field].suffix}
-            </span>
-          ))}
-        </div>
-      )}
-
       {isLoading ? (
         <div className="empty">読み込み中…</div>
       ) : (
