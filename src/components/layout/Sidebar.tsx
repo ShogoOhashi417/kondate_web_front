@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 
 const NAV_ITEMS = [
@@ -8,15 +9,31 @@ const NAV_ITEMS = [
 ]
 
 export function Sidebar() {
+  const [isOpen, setIsOpen] = useState(false)
+
   return (
     <aside className="sidebar">
-      <h2>🍲 献立管理</h2>
-      <nav className="nav">
+      <div className="sidebar-header">
+        <h2>🍲 献立管理</h2>
+        <button
+          type="button"
+          className="hamburger-button"
+          aria-label="メニューを開閉する"
+          aria-expanded={isOpen}
+          onClick={() => setIsOpen((open) => !open)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+      </div>
+      <nav className={`nav${isOpen ? ' open' : ''}`}>
         {NAV_ITEMS.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}
             className={({ isActive }) => (isActive ? 'active' : undefined)}
+            onClick={() => setIsOpen(false)}
           >
             {item.label}
           </NavLink>

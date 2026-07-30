@@ -144,10 +144,37 @@ button {
   padding: 20px 14px;
 }
 
-.sidebar h2 {
-  font-size: 18px;
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin: 0 0 20px;
   padding: 0 10px;
+}
+
+.sidebar h2 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.hamburger-button {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--white);
+  padding: 0;
+}
+
+.hamburger-button span {
+  display: block;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
 }
 
 .nav {
@@ -543,6 +570,21 @@ tr:last-child td {
   }
 }
 
+@media (max-width: 767px) {
+  .hamburger-button {
+    display: flex;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .nav.open {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 @media (max-width: 900px) {
   .app {
     grid-template-columns: 1fr;
@@ -552,20 +594,6 @@ tr:last-child td {
     border-right: 0;
     border-bottom: 1px solid var(--border);
     padding: 10px;
-  }
-
-  .sidebar h2 {
-    display: none;
-  }
-
-  .nav {
-    grid-template-columns: repeat(4, 1fr);
-  }
-
-  .nav button {
-    text-align: center;
-    font-size: 13px;
-    padding: 10px 6px;
   }
 
   .week-grid {
@@ -603,10 +631,6 @@ tr:last-child td {
     grid-template-columns: 1fr;
     border-bottom: 1px solid var(--border);
     padding-bottom: 12px;
-  }
-
-  .nav {
-    grid-template-columns: repeat(2, 1fr);
   }
 
   .field-grid {
