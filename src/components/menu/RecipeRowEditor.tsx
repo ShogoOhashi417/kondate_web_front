@@ -1,4 +1,5 @@
 import type { Food } from '../../types/models'
+import { SearchableCombobox } from '../common/SearchableCombobox'
 
 export type RecipeRowValue = {
   food_id: number
@@ -21,7 +22,7 @@ export function RecipeRowEditor({ rows, foods, onChange }: Props) {
   }
 
   function addRow() {
-    onChange([...rows, { food_id: foods[0]?.id ?? 0, quantity: '' }])
+    onChange([...rows, { food_id: 0, quantity: '' }])
   }
 
   return (
@@ -29,16 +30,12 @@ export function RecipeRowEditor({ rows, foods, onChange }: Props) {
       <div>
         {rows.map((row, index) => (
           <div className="recipe-row" key={index}>
-            <select
+            <SearchableCombobox
+              items={foods}
               value={row.food_id}
-              onChange={(e) => updateRow(index, { food_id: Number(e.target.value) })}
-            >
-              {foods.map((food) => (
-                <option key={food.id} value={food.id}>
-                  {food.name}
-                </option>
-              ))}
-            </select>
+              onChange={(foodId) => updateRow(index, { food_id: foodId })}
+              placeholder="食材を検索"
+            />
             <input
               type="number"
               step="0.01"

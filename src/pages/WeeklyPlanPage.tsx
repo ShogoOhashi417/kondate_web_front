@@ -6,6 +6,7 @@ import { NUTRITION_LABELS } from '../lib/nutritionLabels'
 import type { Nutrition, PlanEntry } from '../types/models'
 import { DayCard } from '../components/weekly/DayCard'
 import { AddMenuModal } from '../components/weekly/AddMenuModal'
+import { NutritionTargetChart } from '../components/weekly/NutritionTargetChart'
 
 const SUMMARY_FIELDS = ['calorie', 'protein', 'fat', 'carbohydrate'] as const
 
@@ -82,6 +83,8 @@ export function WeeklyPlanPage() {
           ))}
         </div>
       )}
+
+      {nutritionTotal && <NutritionTargetChart nutritionTotal={nutritionTotal} />}
 
       {modalDate && (
         <AddMenuModal

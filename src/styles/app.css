@@ -361,11 +361,63 @@ tr:last-child td {
   text-align: center;
 }
 
+.searchable-combobox {
+  position: relative;
+}
+
+.searchable-combobox input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 10px 12px;
+  background: white;
+}
+
+.searchable-combobox-list {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 220px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  box-shadow: 0 8px 20px rgba(20, 40, 20, 0.12);
+}
+
+.searchable-combobox-list li {
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.searchable-combobox-list li.active {
+  background: var(--green-soft);
+}
+
+.searchable-combobox-empty {
+  color: var(--muted);
+  cursor: default !important;
+}
+
 .filter-row {
-  display: grid;
-  grid-template-columns: minmax(180px, 1fr) 220px;
+  display: flex;
   gap: 10px;
   margin-bottom: 14px;
+}
+
+.filter-row input {
+  flex: 1 1 auto;
+  min-width: 180px;
+}
+
+.filter-row select {
+  flex: 0 0 220px;
 }
 
 .notice {
@@ -406,16 +458,8 @@ tr:last-child td {
   margin-top: 0;
 }
 
-.radio-list {
-  display: grid;
-  gap: 10px;
+.modal .searchable-combobox {
   margin: 16px 0 22px;
-}
-
-.radio-list label {
-  display: flex;
-  gap: 8px;
-  align-items: center;
 }
 
 .modal-actions {
@@ -427,6 +471,76 @@ tr:last-child td {
 .empty {
   color: var(--muted);
   font-size: 14px;
+}
+
+.nutrition-chart {
+  margin-top: 24px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.nutrition-chart .section-title {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.nutrition-bar-list {
+  display: grid;
+  gap: 10px;
+}
+
+.nutrition-bar-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 48px;
+  align-items: center;
+  gap: 10px;
+}
+
+.nutrition-bar-label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.nutrition-bar-track {
+  position: relative;
+  height: 12px;
+  background: var(--green-soft);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.nutrition-bar-fill {
+  height: 100%;
+  background: var(--green);
+  border-radius: 999px;
+}
+
+.nutrition-bar-fill.is-full {
+  background: var(--green-dark);
+}
+
+.nutrition-bar-target-mark {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--green-dark);
+  opacity: 0.6;
+}
+
+.nutrition-bar-percent {
+  font-size: 13px;
+  font-weight: 700;
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .nutrition-bar-row {
+    grid-template-columns: 90px 1fr 40px;
+  }
 }
 
 @media (max-width: 900px) {

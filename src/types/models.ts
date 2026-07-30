@@ -11,10 +11,6 @@ export const FOOD_CATEGORIES = [
 
 export type FoodCategory = (typeof FOOD_CATEGORIES)[number]
 
-export const MENU_STATUSES = ['active', 'inactive'] as const
-
-export type MenuStatus = (typeof MENU_STATUSES)[number]
-
 export const NUTRITION_FIELDS = [
   'calorie',
   'protein',
@@ -63,7 +59,6 @@ export type RecipeItem = {
 export type Menu = {
   id: number
   name: string
-  status: MenuStatus
   created_at: string
   updated_at: string
   recipe_items?: RecipeItem[]
@@ -75,18 +70,6 @@ export type PlanEntry = {
   menu_id: number
   sort_order: number
   menu?: Menu
-}
-
-export type DayNutrition = {
-  date: string
-  nutrition: Nutrition
-}
-
-export type NutritionSummaryResponse = {
-  week_start: string
-  week_end: string
-  days: DayNutrition[]
-  week_total: Nutrition
 }
 
 export type ShoppingListRow = {

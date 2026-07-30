@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { apiFetch, ApiError } from '../../lib/api/client'
 import type { Menu } from '../../types/models'
+import { SearchableCombobox } from '../common/SearchableCombobox'
 
 type Props = {
   date: string
@@ -15,7 +16,7 @@ export function AddMenuModal({ date, onClose, onAdded }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
-    apiFetch<Menu[]>('/menus', { params: { status: 'active' } }).then(setMenus)
+    apiFetch<Menu[]>('/menus').then(setMenus)
   }, [])
 
   async function handleConfirm() {
@@ -42,20 +43,12 @@ export function AddMenuModal({ date, onClose, onAdded }: Props) {
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <h3>追加するメニューを選択</h3>
-        <div className="radio-list">
-          {menus.map((menu) => (
-            <label key={menu.id}>
-              <input
-                type="radio"
-                name="menuChoice"
-                value={menu.id}
-                checked={selectedMenuId === menu.id}
-                onChange={() => setSelectedMenuId(menu.id)}
-              />
-              <span>{menu.name}</span>
-            </label>
-          ))}
-        </div>
+        <SearchableCombobox
+          items={menus}
+          value={selectedMenuId ?? 0}
+          onChange={setSelectedMenuId}
+          placeholder="メニューを検索"
+        />
         {duplicateNotice && <div className="notice">{duplicateNotice}</div>}
         <div className="modal-actions">
           <button type="button" className="secondary" onClick={onClose}>

@@ -5,7 +5,6 @@ import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { WeeklyPlanPage } from './pages/WeeklyPlanPage'
 import { ShoppingListPage } from './pages/ShoppingListPage'
-import { NutritionPage } from './pages/NutritionPage'
 import { MenuListPage } from './pages/MenuListPage'
 import { MenuEditPage } from './pages/MenuEditPage'
 import { FoodListPage } from './pages/FoodListPage'
@@ -23,7 +22,6 @@ export const router = createBrowserRouter([
           { index: true, element: <WeeklyPlanPage /> },
           { path: 'weekly', element: <WeeklyPlanPage /> },
           { path: 'shopping-list', element: <ShoppingListPage /> },
-          { path: 'nutrition', element: <NutritionPage /> },
           { path: 'menus', element: <MenuListPage /> },
           { path: 'menus/new', element: <MenuEditPage /> },
           { path: 'menus/:id/edit', element: <MenuEditPage /> },
